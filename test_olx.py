@@ -21,14 +21,43 @@ class OlxTest(unittest.TestCase):
 
     def test_2_Search(self):
         driver = self.driver
+        login_field = driver.find_element_by_xpath("//*[text()='Мой профиль']")
+        login_field.click()
+        mail_field = driver.find_element_by_id("userEmail")
+        mail_field.send_keys("borcshewskiymax@gmail.com")
+        password_field = driver.find_element_by_id("userPass")
+        password_field.send_keys("111111")
+        button_login = driver.find_element_by_id("se_userLogin")
+        button_login.click()
+
+        logo_field = driver.find_element_by_id("headerLogo")
+        logo_field.click()
+
         search_field = driver.find_element_by_class_name("autosuggest-input")
         search_field.send_keys("телефон")
         button_search = driver.find_element_by_id("submit-searchmain")
         button_search.click()
-        titles = driver.find_elements_by_class_name('lheight22')
         assert "телефон" in driver.page_source
+        time.sleep(5)
+        button_close = driver.find_element_by_class_name("highlight-close")
+        button_close.click()
+        time.sleep(10)
 
-    def test_4_EditSeting(self):
+        button_paginate = driver.find_element_by_xpath("//div[@class='pager rel clr']/span[4]/a/span")
+        driver.execute_script("arguments[0].scrollIntoView(true);", button_paginate)
+        time.sleep(10)
+        driver.execute_script("arguments[0].click();", button_paginate)
+        time.sleep(10)
+        button_paginate = driver.find_element_by_xpath("//div[@class='pager rel clr']/span[3]/a/span")
+        driver.execute_script("arguments[0].scrollIntoView(true);", button_paginate)
+        time.sleep(5)
+        driver.execute_script("arguments[0].click();", button_paginate)
+        time.sleep(10)
+        button_order = driver.find_element_by_xpath("//table[@id='offers_table']//tr[3]//a")
+        driver.execute_script("arguments[0].click();", button_order)
+        time.sleep(5)
+
+    def test_3_EditSeting(self):
         driver = self.driver
         login_field = driver.find_element_by_xpath("//*[text()='Мой профиль']")
         login_field.click()
