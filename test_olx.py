@@ -1,6 +1,7 @@
 from selenium import webdriver
 import unittest
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 import time
 
 class OlxTest(unittest.TestCase):
@@ -33,6 +34,7 @@ class OlxTest(unittest.TestCase):
         logo_field = driver.find_element_by_id("headerLogo")
         logo_field.click()
 
+
         search_field = driver.find_element_by_class_name("autosuggest-input")
         search_field.send_keys("телефон")
         button_search = driver.find_element_by_id("submit-searchmain")
@@ -41,21 +43,37 @@ class OlxTest(unittest.TestCase):
         time.sleep(5)
         button_close = driver.find_element_by_class_name("highlight-close")
         button_close.click()
-        time.sleep(10)
+        time.sleep(5)
 
         button_paginate = driver.find_element_by_xpath("//div[@class='pager rel clr']/span[4]/a/span")
         driver.execute_script("arguments[0].scrollIntoView(true);", button_paginate)
-        time.sleep(10)
+        time.sleep(5)
         driver.execute_script("arguments[0].click();", button_paginate)
-        time.sleep(10)
+        time.sleep(5)
         button_paginate = driver.find_element_by_xpath("//div[@class='pager rel clr']/span[3]/a/span")
         driver.execute_script("arguments[0].scrollIntoView(true);", button_paginate)
         time.sleep(5)
         driver.execute_script("arguments[0].click();", button_paginate)
-        time.sleep(10)
-        button_order = driver.find_element_by_xpath("//table[@id='offers_table']//tr[3]//a")
+        time.sleep(5)
+        button_order = driver.find_element_by_xpath("//table[@id='offers_table']//tr[11]//a")
         driver.execute_script("arguments[0].click();", button_order)
         time.sleep(5)
+
+        while (1):
+            try:
+                if (driver.find_element_by_xpath("//div[@id='offerbox']//button")):
+                    delivery_field = driver.find_element_by_xpath("//div[@id='offerbox']//button")
+                    driver.execute_script("arguments[0].click();",  delivery_field)
+                    time.sleep(5)
+                    phone_field = driver.find_element_by_xpath("//form[@id='smsVerificationStep1Form']//input[2]")
+                    phone_field.send_keys(941111111)
+                    break
+            except NoSuchElementException:
+                pass
+            else:
+                next_order = driver.find_element_by_xpath("//td[@class='breadcrumbbox']//tr//a")
+                driver.execute_script("arguments[0].click();", next_order)
+        time.sleep(10)
 
     def test_3_EditSeting(self):
         driver = self.driver
